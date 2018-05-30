@@ -1,0 +1,4 @@
+Algoritmos e Estruturas de Dados I; Rosilane Ribeiro da Mota; 1
+Algoritmos em Grafos; Eveline Alonso Veloso; 5
+Introducao a engenharia de Computação;Alexandre;1
+Calculo Numérico;Paulo;5
