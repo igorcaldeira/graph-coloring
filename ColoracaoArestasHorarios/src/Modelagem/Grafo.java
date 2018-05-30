@@ -1,5 +1,6 @@
 package Modelagem;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Grafo {
@@ -105,4 +106,53 @@ public class Grafo {
 			System.out.println(" ");
 		}
 	}
+//========================================Metodo de coloração de vertices=============================================//
+    void getGrau(ArrayList<Vertice> v,ArrayList<ArestaCV> a) {
+	    for (int i = 0;i < a.size();i++)
+        {
+            for (int j = 0;j < a.size();j++)
+            {
+                if (a.get(i).saida == v.get(j) || a.get(i).destino == v.get(j)){
+                    v.get(j).grau++;
+                }
+            }
+        }
+    }
+    public ArrayList<ArestaCV> AddArestaCV (ArrayList<Vertice> ver)
+    {
+        ArrayList<ArestaCV> a = new ArrayList<>();
+        for (int i = 0;i < ver.size(); i++)
+        {
+            for (int j = 0;j < ver.size(); j++)
+            {
+                if (i != j)
+                    if (ver.get(i).professor == ver.get(j).professor || ver.get(i).periodo == ver.get(j).periodo)
+                    {
+                        ArestaCV aux = new ArestaCV(ver.get(i),ver.get(j));
+                        a.add(aux);
+                    }
+            }
+        }
+        return a;
+    }
+
+
+    public void AddVertices (ArrayList<String> dados) {
+	    ArrayList<Vertice> vertex = new ArrayList<>();
+	    ArrayList<ArestaCV> edge = new ArrayList<>();
+	    for (int i = 0; i < dados.size(); i++) {
+	        String[] m = dados.get(i).split(";");
+	        Vertice vaux = new Vertice(m[1], m[2], m[3]);
+	        vertex.add(vaux);
+	    }
+	    edge = AddArestaCV(vertex);
+	    getGrau(vertex,edge);
+    }
+
+ /*   public void ApplyCV (Grafo graph)
+    {
+        Grafo sub = new Grafo();
+        sub = graph;
+    }*/
 }
+//====================================================================================================================//

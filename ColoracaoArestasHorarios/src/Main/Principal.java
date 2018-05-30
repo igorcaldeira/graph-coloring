@@ -29,10 +29,8 @@ public class Principal {
         ArrayList<Professores> professores = new ArrayList<>();
         ArrayList<Turmas> turmas = new ArrayList<>();
         values  = LerArquivo();
-
-
-
-        ArrayList<String> matriz = new ArrayList<>();
+        Grafo grafo = new Grafo();
+        grafo.AddVertices(values);
 
         Turmas turma1 = new Turmas(0);
         Turmas turma2 = new Turmas(1);
@@ -55,7 +53,7 @@ public class Principal {
         professores.add(prof2);
         professores.add(prof3);
 
-        Grafo grafo = new Grafo();
+
         grafo.defineArestas(turmas, professores);
     }
 
