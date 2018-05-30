@@ -126,7 +126,7 @@ public class Grafo {
             for (int j = 0;j < ver.size(); j++)
             {
                 if (i != j)
-                    if (ver.get(i).professor == ver.get(j).professor || ver.get(i).periodo == ver.get(j).periodo)
+                    if (ver.get(i).professor.equals(ver.get(j).professor) || ver.get(i).periodo.equals(ver.get(j).periodo))
                     {
                         ArestaCV aux = new ArestaCV(ver.get(i),ver.get(j));
                         a.add(aux);
@@ -139,10 +139,11 @@ public class Grafo {
 
     public void AddVertices (ArrayList<String> dados) {
 	    ArrayList<Vertice> vertex = new ArrayList<>();
-	    ArrayList<ArestaCV> edge = new ArrayList<>();
+	    ArrayList<ArestaCV> edge;
+		String[] m;
 	    for (int i = 0; i < dados.size(); i++) {
-	        String[] m = dados.get(i).split(";");
-	        Vertice vaux = new Vertice(m[1], m[2], m[3]);
+	        m = dados.get(i).split(";");
+	        Vertice vaux = new Vertice(m[0], m[1], m[2]);
 	        vertex.add(vaux);
 	    }
 	    edge = AddArestaCV(vertex);
