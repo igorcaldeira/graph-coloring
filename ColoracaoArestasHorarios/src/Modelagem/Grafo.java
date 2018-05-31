@@ -1,6 +1,5 @@
 package Modelagem;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Grafo {
@@ -107,25 +106,56 @@ public class Grafo {
 		}
 	}
 //========================================Metodo de coloração de vertices=============================================//
-    void getGrau(ArrayList<Vertice> v,ArrayList<ArestaCV> a) {
+    private void setGrau(ArrayList<Vertice> v,ArrayList<ArestaCV> a) {
 	    for (int i = 0;i < a.size();i++)
         {
-            for (int j = 0;j < a.size();j++)
+            for (int j = 0;j < v.size();j++)
             {
-                if (a.get(i).saida == v.get(j) || a.get(i).destino == v.get(j)){
+                if (a.get(i).saida == v.get(j)){
                     v.get(j).grau++;
+                    v.get(i).grau++;
                 }
             }
         }
     }
-    public ArrayList<ArestaCV> AddArestaCV (ArrayList<Vertice> ver)
+
+    private Vertice SetSaturationMax(ArrayList<Vertice> v, ArrayList<ArestaCV> edge)
+    {
+        int maior = -1;
+        ArrayList<Integer> sat = new ArrayList<>();
+        Vertice ve = v.get(0);
+        for (ArestaCV edi:edge)
+        {
+            for (int i=0;i < v.size();i++) {
+                for (int j=0;j < v.size();j++) {
+                    if ((edi.saida == v.get(i) && edi.destino == v.get(j)) || (edi.saida == v.get(j) && edi.destino == v.get(i))) {
+                        if (v.get(i).cor != v.get(j).cor) {
+                            sat.add(v.get(i).cor);
+                        }
+                    }
+                }
+				v.get(i).saturation = sat.size();
+				if (sat.size() == maior){
+					ve = GetVMG(v);
+				}
+				else {
+					if (sat.size() > maior) {
+						maior = sat.size();
+						ve = v.get(i);
+					}
+				}
+            }
+        }
+        return ve;
+    }
+    private ArrayList<ArestaCV> AddArestaCV (ArrayList<Vertice> ver)
     {
         ArrayList<ArestaCV> a = new ArrayList<>();
         for (int i = 0;i < ver.size(); i++)
         {
             for (int j = 0;j < ver.size(); j++)
             {
-                if (i != j)
+                if (i > j)
                     if (ver.get(i).professor.equals(ver.get(j).professor) || ver.get(i).periodo.equals(ver.get(j).periodo))
                     {
                         ArestaCV aux = new ArestaCV(ver.get(i),ver.get(j));
@@ -136,24 +166,59 @@ public class Grafo {
         return a;
     }
 
-
     public void AddVertices (ArrayList<String> dados) {
 	    ArrayList<Vertice> vertex = new ArrayList<>();
 	    ArrayList<ArestaCV> edge;
 		String[] m;
-	    for (int i = 0; i < dados.size(); i++) {
-	        m = dados.get(i).split(";");
-	        Vertice vaux = new Vertice(m[0], m[1], m[2]);
-	        vertex.add(vaux);
-	    }
+		for (String dado : dados) {
+			m = dado.split(";");
+			Vertice vaux = new Vertice(m[0], m[1], m[2]);
+			vertex.add(vaux);
+		}
 	    edge = AddArestaCV(vertex);
-	    getGrau(vertex,edge);
+	    setGrau(vertex,edge);
+	    ApplyCV(vertex,edge);
     }
 
- /*   public void ApplyCV (Grafo graph)
+    private Vertice GetVMG (ArrayList<Vertice> vertex)
+	{
+		int maior = -1;
+		Vertice ve = null;
+		for (int i = 0;i < vertex.size();i++) {
+			if (vertex.get(i).grau > maior) {
+				maior = vertex.get(i).grau;
+				ve = vertex.get(i);
+			}
+		}
+		return ve;
+	}
+
+	private void ApplyCV (ArrayList<Vertice> vertex,ArrayList<ArestaCV> edge)
     {
-        Grafo sub = new Grafo();
-        sub = graph;
-    }*/
+		Vertice ve;
+		int corat = 0;
+        ArrayList<Vertice> veaux = new ArrayList<>();
+		ArrayList<Vertice> veaux2 = new ArrayList<>();
+		veaux2.addAll(vertex);
+
+        for (int i = 0;i < vertex.size();i++) {
+            ve = GetVMG(veaux2);
+            veaux2.remove(ve);
+            veaux.add(ve);
+        }
+        for (int i = 0;i < veaux.size();i++)
+        {
+            for (int k = 0;k < veaux.size();k++)
+            {
+                ve = SetSaturationMax(veaux,edge);
+                for (int j = 0;j < veaux.size();j++){
+                    if (veaux.get(j).equals(ve)){
+                        corat++;
+                        veaux.get(i).cor = corat;
+                    }
+                }
+            }
+        }
+    }
 }
 //====================================================================================================================//
