@@ -1,39 +1,12 @@
 package Modelagem;
 
 import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
+import java.util.LinkedList;
 
 public class Grafo {
 
-	public void defineCA(ArrayList<String> values) {
-
-        ArrayList<Professores> professores = new ArrayList<>();
-        ArrayList<Turmas> turmas = new ArrayList<>();
-
-        for (int i = 0; i < values.size(); i++) {
-			System.out.println(values.get(i));
-		}
-        
-        Turmas turma1 = new Turmas(0);
-        Turmas turma2 = new Turmas(1);
-        Turmas turma3 = new Turmas(2);
-        Turmas turma4 = new Turmas(3);
-
-        turmas.add(turma1);
-        turmas.add(turma2);
-        turmas.add(turma3);
-        turmas.add(turma4);
-
-        Professores prof1 = new Professores(0);
-        Professores prof2 = new Professores(1);
-        Professores prof3 = new Professores(2);
-
-        professores.add(prof1);
-        professores.add(prof2);
-        professores.add(prof3);
-
-        this.defineArestas(turmas, professores);
-	}
-	
 	/* define as arestas e as cores da mesma */
 	public void defineArestas(ArrayList<Turmas> turmas, ArrayList<Professores> professores) {
 
@@ -149,35 +122,6 @@ public class Grafo {
         }
     }
 
-    private Vertice SetSaturationMax(ArrayList<Vertice> v, ArrayList<ArestaCV> edge)
-    {
-        int maior = -1;
-        ArrayList<Integer> sat = new ArrayList<>();
-        Vertice ve = v.get(0);
-        for (ArestaCV edi:edge)
-        {
-            for (int i=0;i < v.size();i++) {
-                for (int j=0;j < v.size();j++) {
-                    if ((edi.saida == v.get(i) && edi.destino == v.get(j)) || (edi.saida == v.get(j) && edi.destino == v.get(i))) {
-                        if (v.get(i).cor != v.get(j).cor) {
-                            sat.add(v.get(i).cor);
-                        }
-                    }
-                }
-				v.get(i).saturation = sat.size();
-				if (sat.size() == maior){
-					ve = GetVMG(v);
-				}
-				else {
-					if (sat.size() > maior) {
-						maior = sat.size();
-						ve = v.get(i);
-					}
-				}
-            }
-        }
-        return ve;
-    }
     private ArrayList<ArestaCV> AddArestaCV (ArrayList<Vertice> ver)
     {
         ArrayList<ArestaCV> a = new ArrayList<>();
@@ -196,7 +140,7 @@ public class Grafo {
         return a;
     }
 
-    public void AddVerticesCV(ArrayList<String> dados) {
+    public void AddVertices (ArrayList<String> dados) {
 	    ArrayList<Vertice> vertex = new ArrayList<>();
 	    ArrayList<ArestaCV> edge;
 		String[] m;
@@ -207,47 +151,59 @@ public class Grafo {
 		}
 	    edge = AddArestaCV(vertex);
 	    setGrau(vertex,edge);
-	    ApplyCV(vertex,edge);
+        greedyColoring(vertex,edge);
     }
 
-    private Vertice GetVMG (ArrayList<Vertice> vertex)
-	{
-		int maior = -1;
-		Vertice ve = null;
-		for (int i = 0;i < vertex.size();i++) {
-			if (vertex.get(i).grau > maior) {
-				maior = vertex.get(i).grau;
-				ve = vertex.get(i);
-			}
-		}
-		return ve;
-	}
 
-	private void ApplyCV (ArrayList<Vertice> vertex,ArrayList<ArestaCV> edge)
-    {
-		Vertice ve;
-		int corat = 0;
-        ArrayList<Vertice> veaux = new ArrayList<>();
-		ArrayList<Vertice> veaux2 = new ArrayList<>();
-		veaux2.addAll(vertex);
-
-        for (int i = 0;i < vertex.size();i++) {
-            ve = GetVMG(veaux2);
-            veaux2.remove(ve);
-            veaux.add(ve);
-        }
-        for (int i = 0;i < veaux.size();i++)
+    boolean isAdjacent(Vertice vertex1,Vertice vertex2, ArestaCV edge){
+		return ((edge.saida == vertex1 && edge.destino == vertex2 || edge.destino == vertex1 && edge.saida == vertex2));
+    }
+        void greedyColoring(ArrayList<Vertice> vertex,ArrayList<ArestaCV> edge)
         {
-            for (int k = 0;k < veaux.size();k++)
+            //int result[] = new int[vertex.size()];-- Vertices
+
+            // Initialize all vertices as unassigned
+            // Assign the first color to first vertex
+            vertex.get(0).cor = 0;
+
+            // A temporary array to store the available colors. False
+            // value of available[cr] would mean that the color cr is
+            // assigned to one of its adjacent vertices
+
+            // Initially, all colors are available
+
+            // Assign colors to remaining V-1 vertices
+            for (int i = 1; i < vertex.size(); i++)
             {
-                ve = SetSaturationMax(veaux,edge);
-                for (int j = 0;j < veaux.size();j++){
-                    if (veaux.get(j).equals(ve)){
-                        corat++;
-                        veaux.get(i).cor = corat;
-                    }
+                // Process all adjacent vertices and flag their colors
+                // as unavailable
+                Iterator<ArestaCV> it = edge.iterator();
+                while (it.hasNext())
+                {
+                    ArestaCV ar = it.next();
+                    for (Vertice v:vertex)
+                    	if (vertex.get(i) != v)
+                        	if (isAdjacent(vertex.get(i),v,ar))
+                            	v.available = false;
                 }
+
+                // Find the first available color
+                int cr;
+                for (cr = 0; cr < vertex.size(); cr++){
+                    if (vertex.get(cr).available)
+                        break;
+                }
+                vertex.get(i).cor = cr;
+                for(Vertice v:vertex)
+                    v.available = true;
+
+                // Reset the values back to true for the next iteration
             }
+
+            // print the result
+            for (int u = 0; u < vertex.size(); u++){
+                System.out.println("Vertex " + vertex.get(u).materia + " --->  Color "
+                        + vertex.get(u).cor);
         }
     }
 }
