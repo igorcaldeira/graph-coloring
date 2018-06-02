@@ -4,6 +4,36 @@ import java.util.ArrayList;
 
 public class Grafo {
 
+	public void defineCA(ArrayList<String> values) {
+
+        ArrayList<Professores> professores = new ArrayList<>();
+        ArrayList<Turmas> turmas = new ArrayList<>();
+
+        for (int i = 0; i < values.size(); i++) {
+			System.out.println(values.get(i));
+		}
+        
+        Turmas turma1 = new Turmas(0);
+        Turmas turma2 = new Turmas(1);
+        Turmas turma3 = new Turmas(2);
+        Turmas turma4 = new Turmas(3);
+
+        turmas.add(turma1);
+        turmas.add(turma2);
+        turmas.add(turma3);
+        turmas.add(turma4);
+
+        Professores prof1 = new Professores(0);
+        Professores prof2 = new Professores(1);
+        Professores prof3 = new Professores(2);
+
+        professores.add(prof1);
+        professores.add(prof2);
+        professores.add(prof3);
+
+        this.defineArestas(turmas, professores);
+	}
+	
 	/* define as arestas e as cores da mesma */
 	public void defineArestas(ArrayList<Turmas> turmas, ArrayList<Professores> professores) {
 
@@ -166,7 +196,7 @@ public class Grafo {
         return a;
     }
 
-    public void AddVertices (ArrayList<String> dados) {
+    public void AddVerticesCV(ArrayList<String> dados) {
 	    ArrayList<Vertice> vertex = new ArrayList<>();
 	    ArrayList<ArestaCV> edge;
 		String[] m;

@@ -21,40 +21,24 @@ public class Principal {
 
     public static void main(String[] args) {
 
-        /* define grafo bipartido */
-
-        /* turmas */
-
         ArrayList<String> values = new ArrayList<>();
-        ArrayList<Professores> professores = new ArrayList<>();
-        ArrayList<Turmas> turmas = new ArrayList<>();
-        values  = LerArquivo();
+        
         Grafo grafo = new Grafo();
-        grafo.AddVertices(values);
 
-        Turmas turma1 = new Turmas(0);
-        Turmas turma2 = new Turmas(1);
-        Turmas turma3 = new Turmas(2);
-        Turmas turma4 = new Turmas(3);
+        values  = LerArquivo();
 
-        turmas.add(turma1);
-        turmas.add(turma2);
-        turmas.add(turma3);
-        turmas.add(turma4);
+        /**/
+        /* metodologia para coloracao de vertices */
+        /**/
+        
+        grafo.AddVerticesCV(values);
 
-        /* professores */
+        /**/
+        /* metodologia para coloracao de arestas*/
+        /**/
 
-
-        Professores prof1 = new Professores(0);
-        Professores prof2 = new Professores(1);
-        Professores prof3 = new Professores(2);
-
-        professores.add(prof1);
-        professores.add(prof2);
-        professores.add(prof3);
-
-
-        grafo.defineArestas(turmas, professores);
+        grafo.defineCA(values);
+        
     }
 
     static ArrayList LerArquivo() {
@@ -63,6 +47,11 @@ public class Principal {
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o caminho do arquivo:");
         path = sc.nextLine();
+        
+        if(path.equals("")) {
+        	path = "ColoracaoArestasHorarios/Teste.txt";
+        }
+        
         File f = new File(path);
         try {
             BufferedReader buff = new BufferedReader(new FileReader(f));
