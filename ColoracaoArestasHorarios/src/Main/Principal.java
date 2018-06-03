@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import Modelagem.*;
 
+
 import javax.swing.*;
 
 import static java.nio.file.Files.readAllLines;
@@ -22,22 +23,21 @@ public class Principal {
     public static void main(String[] args) {
 
         ArrayList<String> values = new ArrayList<>();
-        
-        Grafo grafo = new Grafo();
-
+        ArrayList<Professores> professores = new ArrayList<>();
+        ArrayList<Turmas> turmas = new ArrayList<>();
         values  = LerArquivo();
+        Grafo grafo = new Grafo();
 
         /**/
         /* metodologia para coloracao de vertices */
         /**/
         
-        //grafo.AddVerticesCV(values);
+//        grafo.AddVerticesCV(values);
 
         /**/
         /* metodologia para coloracao de arestas*/
         /**/
         grafo.defineCA(values);
-        
     }
 
     static ArrayList LerArquivo() {
@@ -45,12 +45,13 @@ public class Principal {
         ArrayList<String> values = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o caminho do arquivo:");
-//        path = sc.nextLine();
+
+        path = sc.nextLine();
         path = "";
         if(path.equals("")) {
         	path = "ColoracaoArestasHorarios/Teste.txt";
         }
-        
+       
         File f = new File(path);
         try {
             BufferedReader buff = new BufferedReader(new FileReader(f));

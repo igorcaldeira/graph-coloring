@@ -2,12 +2,13 @@ package Modelagem;
 
 public class Vertice extends Grafo{
     String professor,materia,periodo;
-    int cor = -1,saturation = -1;
+    int cor = -1;
     int grau;
-    public Vertice(String professor,String materia,String periodo)
+    boolean available = true;
+    public Vertice(String materia,String professor,String periodo)
     {
-        this.professor = professor;
         this.materia = materia;
+        this.professor = professor;
         this. periodo = periodo;
     }
 }
