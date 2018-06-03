@@ -2,14 +2,16 @@ package Modelagem;
 
 public class Aresta {
 
-	public int idProfessor = -1;
-	public int idTurma = -1;
+	public int professor;
+	public int turma;
+	public String nome_materia;
 	public int idHorario = -1;
 	
-	public Aresta(int idProfessor, int idTurma) {
+	public Aresta(int professor, int turma, String nome_materia) {
 		super();
-		this.idProfessor = idProfessor;
-		this.idTurma = idTurma;
+		this.professor = professor;
+		this.turma = turma;
+		this.nome_materia = nome_materia;
 	}
 	
 }

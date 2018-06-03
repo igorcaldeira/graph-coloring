@@ -6,51 +6,69 @@ public class Grafo {
 
 	public void defineCA(ArrayList<String> values) {
 
+		ArrayList<Aresta> listaAresta = new ArrayList<>();
         ArrayList<Professores> professores = new ArrayList<>();
         ArrayList<Turmas> turmas = new ArrayList<>();
 
         for (int i = 0; i < values.size(); i++) {
-			System.out.println(values.get(i));
+        	String[] parts = values.get(i).split(";");
+        	
+    		String nome_professor = parts[1].trim();
+    		String nome_materia = parts[0].trim();
+    		String numero_periodo = parts[2].trim();
+    		
+    		/*tenta adicionar professor*/
+    		
+    		Integer id_prof = professores.size() + 0;
+    		Professores prof = new Professores(id_prof, nome_professor);
+    		boolean temProfessor = false;
+    		int profIdJaCadastrado = id_prof;
+    		for (int j = 0; j < professores.size(); j++) {
+				if(professores.get(j).nome.equals(nome_professor)) {
+					temProfessor = true;
+					profIdJaCadastrado = professores.get(j).id;
+				}
+			}
+    		if(!temProfessor) {
+        		professores.add(prof);
+    		}
+    		
+    		/*tenta adicionar turma*/
+    		
+            Integer id_turm = turmas.size() + 0;
+    		Turmas turm = new Turmas(id_turm, numero_periodo);
+    		boolean temTurma = false;
+    		int turmIdJaCadastrado = id_turm;
+    		for (int j = 0; j < turmas.size(); j++) {
+				if(turmas.get(j).numero_turma.equals(numero_periodo)) {
+					temTurma = true;
+					turmIdJaCadastrado = turmas.get(j).id;
+				}
+			}
+    		if(!temTurma) {
+        		turmas.add(turm);
+    		}
+    		
+    		/*adiciona aresta*/
+    		
+    		Aresta a = new Aresta(profIdJaCadastrado, turmIdJaCadastrado, nome_materia);
+    		listaAresta.add(a);
 		}
+
         
-        Turmas turma1 = new Turmas(0);
-        Turmas turma2 = new Turmas(1);
-        Turmas turma3 = new Turmas(2);
-        Turmas turma4 = new Turmas(3);
-
-        turmas.add(turma1);
-        turmas.add(turma2);
-        turmas.add(turma3);
-        turmas.add(turma4);
-
-        Professores prof1 = new Professores(0);
-        Professores prof2 = new Professores(1);
-        Professores prof3 = new Professores(2);
-
-        professores.add(prof1);
-        professores.add(prof2);
-        professores.add(prof3);
-
-        this.defineArestas(turmas, professores);
+        this.defineArestas(listaAresta, professores, turmas);
 	}
 	
 	/* define as arestas e as cores da mesma */
-	public void defineArestas(ArrayList<Turmas> turmas, ArrayList<Professores> professores) {
+	
+	public void defineArestas(ArrayList<Aresta> listaAresta,  ArrayList<Professores> professores, ArrayList<Turmas>  turmas) {
 
-		ArrayList<Aresta> listaAresta = new ArrayList<Aresta>();
-		
-		for (Turmas t : turmas) {
-			for (Professores p : professores) {
-				/* condicional por materias a serem dadas */
-				Aresta aresta = new Aresta(p.id, t.id);
-				listaAresta.add(aresta);
-			}
-		}
-		
 		for (int i = 0; i < listaAresta.size(); i++) {
 
-			Turmas t = turmas.get(listaAresta.get(i).idTurma);
-			Professores p = professores.get(listaAresta.get(i).idProfessor);
+			Aresta a = listaAresta.get(i);
+			
+			Turmas t = turmas.get(a.turma);
+			Professores p = professores.get(a.professor);
 			
 			/* os dois vertices nao tiveram arestas coloridas ainda*/
 			
@@ -114,28 +132,43 @@ public class Grafo {
 		
 		/* exibe resultados */
 
+		/* cria uma pré lista com vários horários disponiveis na grade do curso*/
+		ArrayList<String> disponibilidades = new ArrayList<>();
+
+		String[] dias = {"Segunda", "Terça", "Quarta", "Quinta", "Sexta"};
+		String[] horarios = {"Horário de 07:00", "Horário de 08:50", "Horário de 10:40"};
+		
+		String dia_string = "";
+		String horario_string = "";
+		
+		for(int dia = 0; dia < 4; dia++) {
+			dia_string = dias[dia];
+			for(int horario = 0; horario < 3; horario++) {
+				horario_string = horarios[horario];
+				disponibilidades.add(dia_string +"-Feira / "+horario_string);
+			}
+		}
+
+		System.out.println(" ");
 		for (int i = 0; i < listaAresta.size(); i++) {
 
-			Turmas t = turmas.get(listaAresta.get(i).idTurma);
-			Professores p = professores.get(listaAresta.get(i).idProfessor);
+			Aresta a = listaAresta.get(i);
+
+			Turmas t = turmas.get(a.turma);
+			Professores p = professores.get(a.professor);
+
+			System.out.println(disponibilidades.get(listaAresta.get(i).idHorario)+" - "+a.nome_materia + " / Período: " + t.numero_turma+"  ("+t.id+" - "+p.id+") ");
 			
-			if(listaAresta.get(i).idHorario == 0) {
-				System.out.println("("+t.id+"+"+p.id+") aresta cor vermelha - horario 7 horas");
-			}else if(listaAresta.get(i).idHorario == 1) {
-				System.out.println("("+t.id+"+"+p.id+") aresta cor azul - horario 8 horas");
-			}else if(listaAresta.get(i).idHorario == 2) {
-				System.out.println("("+t.id+"+"+p.id+") aresta cor verde - horario 9 horas");
-			}else if(listaAresta.get(i).idHorario == 3) {
-				System.out.println("("+t.id+"+"+p.id+") aresta cor amarelo - horario 10 horas");
-			}else if(listaAresta.get(i).idHorario == 4) {
-				System.out.println("("+t.id+"+"+p.id+") aresta cor roxo - horario 11 horas");
-			}else{
-				System.out.println("("+t.id+"+"+p.id+") error");
-			}
 			System.out.println(" ");
 		}
 	}
-//========================================Metodo de coloraÃ§Ã£o de vertices=============================================//
+
+	/**/
+	/**/
+	//================Metodo de coloraÃ§Ã£o de vertices=======================//
+	/**/
+	/**/
+	
     private void setGrau(ArrayList<Vertice> v,ArrayList<ArestaCV> a) {
 	    for (int i = 0;i < a.size();i++)
         {

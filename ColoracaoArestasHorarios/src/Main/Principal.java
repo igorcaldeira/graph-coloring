@@ -31,12 +31,11 @@ public class Principal {
         /* metodologia para coloracao de vertices */
         /**/
         
-        grafo.AddVerticesCV(values);
+        //grafo.AddVerticesCV(values);
 
         /**/
         /* metodologia para coloracao de arestas*/
         /**/
-
         grafo.defineCA(values);
         
     }
@@ -46,8 +45,8 @@ public class Principal {
         ArrayList<String> values = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o caminho do arquivo:");
-        path = sc.nextLine();
-        
+//        path = sc.nextLine();
+        path = "";
         if(path.equals("")) {
         	path = "ColoracaoArestasHorarios/Teste.txt";
         }
