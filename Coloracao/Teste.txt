@@ -1,0 +1,11 @@
+monitor;Flaviana;1
+escova;Ninian;1
+ima;Alex;1
+navio;Flaviana;2
+sofa;Dharma;2
+capacete;Alex;2
+toalha;Flaviana;3
+janela;Alex;3
+computador;Panfilo;3
+jornal;Pelagio;4
+garrafa;Giannina;4

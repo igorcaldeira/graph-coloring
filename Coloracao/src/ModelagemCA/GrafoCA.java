@@ -2,6 +2,8 @@ package ModelagemCA;
 
 
 
+import ModelagemCV.Vertice;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -166,5 +168,4 @@ public class GrafoCA {
 			System.out.println(" ");
 		}
 	}
-
 }

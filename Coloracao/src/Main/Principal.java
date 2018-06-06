@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import ModelagemCA.ArestaCA;
 import ModelagemCA.Turmas;
 import ModelagemCA.GrafoCA;
 import ModelagemCA.Professores;
@@ -38,12 +40,14 @@ public class Principal {
             op = menu();
             switch (op) {
                 case 1:
+                    GrafoCA grafoCA = new GrafoCA();
+                    grafoCA.defineCA(values);
                     break;
                 case 2:
                     ArrayList<Vertice> verticeCV;
-                    GrafoCV grafo = new GrafoCV();
-                    verticeCV = grafo.CriarVertices(values);
-                    grafo.DefineHorariosCV(verticeCV);
+                    GrafoCV grafoCV = new GrafoCV();
+                    verticeCV = grafoCV.CriarVertices(values);
+                    grafoCV.DefineHorariosCV(verticeCV);
                     break;
             }
         }while(op != 0);
